@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Carta San Valentín</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(to bottom, #ffe8f0, #ffc2d1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* estrellas */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+  0%,100%{opacity:0.3;}
+  50%{opacity:1;}
+}
+
+/* contenedor */
+.container {
+  position: relative;
+  width: 320px;
+  height: 260px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* sobre */
+.envelope {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 180px;
+  background: #fff0f5;
+  border: 2px solid #ff8fb3;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.2);
+  overflow: visible;
+}
+
+/* tapa */
+.flap {
+  width: 100%;
+  height: 100%;
+  background: #ff8fb3;
+  clip-path: polygon(0 0, 100% 0, 50% 60%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top;
+  transition: transform 1s ease;
+  z-index: 5;
+}
+
+/* carta */
+.letter {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 300px;
+  height: 170px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  font-family: 'Great Vibes', cursive;
+  font-size: 22px;
+  color: #c9184a;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  transform: translateY(120px);
+  transition: transform 1s ease, opacity 1s ease;
+  opacity: 0;
+  z-index: 6;
+}
+
+/* flor */
+.flower {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  font-size: 60px;
+  transition: transform 1s ease, opacity 1s ease;
+  opacity: 0;
+  z-index: 7;
+}
+
+/* corazón */
+.heart {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 22px;
+}
+
+/* abierto */
+.open .flap {
+  transform: rotateX(180deg);
+}
+
+.open .letter {
+  transform: translateY(-120px);
+  opacity: 1;
+}
+
+.open .flower {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+/* lluvia */
+.fall {
+  position: absolute;
+  font-size: 24px;
+  animation: fall linear forwards;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  from {transform: translateY(-50px);}
+  to {transform: translateY(100vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" onclick="abrirCarta()">
+  <div class="envelope">
+
+    <div class="flap"></div>
+
+    <div class="flower">🌸</div>
+
+    <div class="letter">
+      <div id="text"></div>
+      <div class="heart">❤️</div>
+    </div>
+
+  </div>
+</div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/02/audio_9c6d7f9c7d.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const message = "No necesito un día para decirte lo bonito que haces que se ilumine mi vida.\nEsto es solo un pequeño recordatorio.\nTQM mi pequeño solecito ☀️🌸";
+
+let i = 0;
+let abierto = false;
+let lluviaInterval;
+
+/* estrellas */
+for(let s=0; s<40; s++){
+  const star = document.createElement("div");
+  star.className = "star";
+  star.style.width = star.style.height = Math.random()*3 + "px";
+  star.style.left = Math.random()*window.innerWidth+"px";
+  star.style.top = Math.random()*window.innerHeight+"px";
+  document.body.appendChild(star);
+}
+
+function abrirCarta() {
+  const container = document.querySelector('.container');
+  const music = document.getElementById("music");
+  const text = document.getElementById("text");
+
+  if(!abierto){
+    container.classList.add("open");
+    music.play();
+    escribirTexto();
+    lluviaInterval = lluvia();
+    abierto = true;
+  } else {
+    container.classList.remove("open");
+    music.pause();
+    text.innerHTML = "";
+    i = 0;
+    clearInterval(lluviaInterval);
+    abierto = false;
+  }
+}
+
+/* escribir texto */
+function escribirTexto(){
+  const text = document.getElementById("text");
+  if(i < message.length){
+    text.innerHTML += message.charAt(i);
+    i++;
+    setTimeout(escribirTexto, 70);
+  }
+}
+
+/* lluvia */
+function lluvia(){
+  return setInterval(()=>{
+    const drop = document.createElement("div");
+    drop.className = "fall";
+    const emojis = ["💖","🌸","💕","🌹","❤️","☀️"];
+    drop.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+    drop.style.left = Math.random()*window.innerWidth+"px";
+    drop.style.animationDuration = (Math.random()*3+2)+"s";
+    document.body.appendChild(drop);
+    setTimeout(()=>drop.remove(),5000);
+  },300);
+}
+</script>
+
+</body>
+</html>
