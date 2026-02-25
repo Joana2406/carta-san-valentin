@@ -1,4 +1,4 @@
-# 💌 Carta de San Valentín
+# 💌 Carta de San Valentín animada en HTML, CSS y JavaScript
 
 Carta interactiva hecha con HTML, CSS y JavaScript 💖  
 Incluye animación, música y lluvia de flores 🌸
@@ -9,7 +9,7 @@ Incluye animación, música y lluvia de flores 🌸
 
 ## 🚀 Abrir la carta
 Haz clic aquí para verla en acción:
-
+https://joana2406.github.io/carta-san-valentin/
 
 ## 🛠️ Tecnologías
 - HTML
